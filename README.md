@@ -486,7 +486,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Ameerpasha**
 - GitHub: [@ameerpasha](https://github.com/Ameer-pasha)
-- Email: ameerpasha@example.com
 
 ## 🙏 Acknowledgments
 
@@ -498,7 +497,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 Email: support@shopease.com
 - 🐛 Issues: [GitHub Issues](https://github.com/Ameer-pasha/ShopEase/issues)
 - 📚 Documentation: [https://github.com/Ameer-pasha/ShopEase/wiki)
 - 💬 Discussions: [GitHub Discussions](https://github.com/Ameer-pasha/ShopEase/discussions)
