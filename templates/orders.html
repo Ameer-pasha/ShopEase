@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block title %}My Orders - ShopEase{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <!-- Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h2 class="text-white mb-0">
+                            <i class="fas fa-receipt me-2"></i>My Orders
+                        </h2>
+                        <p class="text-white-50 mb-0 mt-2">Track and manage your purchases</p>
+                    </div>
+                    <a href="{{ url_for('products') }}" class="btn btn-primary">
+                        <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% if orders %}
+            <!-- Orders List -->
+            {% for order in orders %}
+            <div class="card-glass mb-4 fade-in">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <div class="p-3 rounded-circle" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                                        <i class="fas fa-box text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h5 class="text-white mb-0">Order #{{ order.id }}</h5>
+                                    <small class="text-white-50">{{ order.created_at.strftime('%B %d, %Y') }}</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 text-center">
+                            <div class="mb-1">
+                                <span class="badge {% if order.status == 'completed' %}bg-success{% elif order.status == 'pending' %}bg-warning{% elif order.status == 'processing' %}bg-info{% elif order.status == 'shipped' %}bg-primary{% else %}bg-secondary{% endif %} fs-6">
+                                    {% if order.status == 'completed' %}
+                                        <i class="fas fa-check me-1"></i>Completed
+                                    {% elif order.status == 'pending' %}
+                                        <i class="fas fa-clock me-1"></i>Pending
+                                    {% elif order.status == 'processing' %}
+                                        <i class="fas fa-cog fa-spin me-1"></i>Processing
+                                    {% elif order.status == 'shipped' %}
+                                        <i class="fas fa-shipping-fast me-1"></i>Shipped
+                                    {% else %}
+                                        <i class="fas fa-times me-1"></i>{{ order.status.title() }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 text-center">
+                            <h4 class="text-white mb-0">${{ "%.2f"|format(order.total) }}</h4>
+                            <small class="text-white-50">{{ order.order_items|length }} item{{ 's' if order.order_items|length != 1 else '' }}</small>
+                        </div>
+
+                        <div class="col-md-3 text-center">
+                            {% if order.status == 'shipped' or order.status == 'completed' %}
+                                <small class="text-success d-block">
+                                    <i class="fas fa-truck me-1"></i>Tracking: TRK{{ order.id }}{{ order.created_at.strftime('%m%d') }}
+                                </small>
+                            {% elif order.status == 'pending' %}
+                                <small class="text-warning d-block">
+                                    <i class="fas fa-clock me-1"></i>Processing within 24 hours
+                                </small>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-2 text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-glass btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Actions
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="#" onclick="viewOrderDetails({{ order.id }})">
+                                        <i class="fas fa-eye me-2"></i>View Details
+                                    </a></li>
+                                    {% if order.status == 'shipped' or order.status == 'completed' %}
+                                    <li><a class="dropdown-item" href="#">
+                                        <i class="fas fa-truck me-2"></i>Track Package
+                                    </a></li>
+                                    {% endif %}
+                                    {% if order.status == 'completed' %}
+                                    <li><a class="dropdown-item" href="#">
+                                        <i class="fas fa-redo me-2"></i>Reorder Items
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#">
+                                        <i class="fas fa-star me-2"></i>Leave Review
+                                    </a></li>
+                                    {% endif %}
+                                    {% if order.status == 'pending' %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="cancelOrder({{ order.id }})">
+                                        <i class="fas fa-times me-2"></i>Cancel Order
+                                    </a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items Preview -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="d-flex gap-2 flex-wrap">
+                                {% for item in order.order_items[:4] %}
+                                <div class="position-relative">
+                                    <img src="{{ item.product.image_url or 'https://via.placeholder.com/60' }}"
+                                         class="rounded" style="width: 60px; height: 60px; object-fit: cover;"
+                                         title="{{ item.product.name }} ({{ item.quantity }}x)">
+                                    {% if item.quantity > 1 %}
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                        {{ item.quantity }}
+                                    </span>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% if order.order_items|length > 4 %}
+                                <div class="d-flex align-items-center justify-content-center rounded"
+                                     style="width: 60px; height: 60px; background: rgba(255,255,255,0.1);">
+                                    <small class="text-white">+{{ order.order_items|length - 4 }}</small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if pagination and pagination.pages > 1 %}
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="Orders pagination">
+                        <ul class="pagination justify-content-center">
+                            {% if pagination.has_prev %}
+                            <li class="page-item">
+                                <a class="page-link bg-dark border-secondary text-white" href="{{ url_for('orders', page=pagination.prev_num) }}">
+                                    <i class="fas fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% for page_num in pagination.iter_pages() %}
+                                {% if page_num %}
+                                    {% if page_num != pagination.page %}
+                                    <li class="page-item">
+                                        <a class="page-link bg-dark border-secondary text-white" href="{{ url_for('orders', page=page_num) }}">{{ page_num }}</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="page-item active">
+                                        <span class="page-link bg-primary border-primary">{{ page_num }}</span>
+                                    </li>
+                                    {% endif %}
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link bg-dark border-secondary text-white-50">...</span>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if pagination.has_next %}
+                            <li class="page-item">
+                                <a class="page-link bg-dark border-secondary text-white" href="{{ url_for('orders', page=pagination.next_num) }}">
+                                    <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            {% endif %}
+
+        {% else %}
+            <!-- Empty State -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-glass text-center py-5">
+                        <div class="card-body">
+                            <i class="fas fa-receipt text-white-50 mb-4" style="font-size: 4rem;"></i>
+                            <h3 class="text-white mb-3">No orders found</h3>
+                            <p class="text-white-50 mb-4">You haven't placed any orders yet. Start shopping to see your orders here.</p>
+                            <a href="{{ url_for('products') }}" class="btn btn-primary btn-lg">
+                                <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title text-white">Order Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="orderDetailsContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function viewOrderDetails(orderId) {
+    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+    const content = document.getElementById('orderDetailsContent');
+
+    content.innerHTML = `
+        <div class="text-center py-4">
+            <i class="fas fa-spinner fa-spin fa-2x text-white-50"></i>
+            <p class="text-white-50 mt-2">Loading order details...</p>
+        </div>
+    `;
+
+    modal.show();
+
+    // Simulate API call
+    setTimeout(() => {
+        content.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-white">Order Information</h6>
+                    <p class="text-white-50 small mb-1">Order ID: #${orderId}</p>
+                    <p class="text-white-50 small mb-1">Date: ${new Date().toLocaleDateString()}</p>
+                    <p class="text-white-50 small mb-3">Status: Processing</p>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-white">Shipping Address</h6>
+                    <p class="text-white-50 small mb-1">123 Main Street</p>
+                    <p class="text-white-50 small mb-1">City, State 12345</p>
+                    <p class="text-white-50 small mb-3">United States</p>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <h6 class="text-white mb-3">Order Items</h6>
+            <div class="d-flex align-items-center mb-3">
+                <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=80&h=80&fit=crop"
+                     class="rounded me-3" style="width: 60px; height: 60px; object-fit: cover;">
+                <div class="flex-grow-1">
+                    <h6 class="text-white mb-1">Sample Product</h6>
+                    <small class="text-white-50">Quantity: 1</small>
+                </div>
+                <div class="text-end">
+                    <span class="text-white fw-bold">$999.99</span>
+                </div>
+            </div>
+            <hr class="border-secondary">
+            <div class="text-end">
+                <h5 class="text-white">Total: $999.99</h5>
+            </div>
+        `;
+    }, 1000);
+}
+
+function cancelOrder(orderId) {
+    if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+        // Simulate API call
+        alert('Order cancellation request submitted. You will receive a confirmation email shortly.');
+        location.reload();
+    }
+}
+
+// Add fade-in animation
+document.addEventListener('DOMContentLoaded', function() {
+    const elements = document.querySelectorAll('.fade-in');
+    elements.forEach((el, index) => {
+        setTimeout(() => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.5s ease';
+
+            setTimeout(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }, 50);
+        }, index * 100);
+    });
+});
+</script>
+{% endblock %}

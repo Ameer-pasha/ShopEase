@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% block title %}Products - ShopEase{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 text-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="text-white mb-3 bounce-in">Premium Products</h1>
+                <p class="text-white-50 lead fade-in">Discover our carefully curated collection of premium technology products</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filters Section -->
+<section class="py-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card-glass p-4 mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="text-white mb-0"><i class="fas fa-filter me-2"></i>Filter Products</h5>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2 flex-wrap justify-content-md-end mt-3 mt-md-0">
+                                <button class="btn btn-glass btn-sm active">All</button>
+                                <button class="btn btn-glass btn-sm">Laptops</button>
+                                <button class="btn btn-glass btn-sm">Phones</button>
+                                <button class="btn btn-glass btn-sm">Accessories</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="py-4">
+    <div class="container">
+        <div class="row g-4">
+            {% if products %}
+                {% for product in products %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="{{ product.image_url or 'https://via.placeholder.com/400x300?text=Product' }}"
+                                 class="card-img-top" alt="{{ product.name }}" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none;">
+                                    {% if product.stock > 10 %}In Stock{% elif product.stock > 0 %}Limited{% else %}Out of Stock{% endif %}
+                                </span>
+                            </div>
+                            <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.8));">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <button class="btn btn-glass btn-sm">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
+                                    <button class="btn btn-glass btn-sm">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">{{ product.name }}</h5>
+                            <p class="card-text text-muted small mb-3">{{ product.description[:60] }}{% if product.description|length > 60 %}...{% endif %}</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">${{ "%.2f"|format(product.price) }}</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <small class="text-muted">4.9 (127)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                {% if product.stock > 0 %}
+                                    <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-primary">
+                                        <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                    </a>
+                                {% else %}
+                                    <button class="btn btn-secondary" disabled>
+                                        <i class="fas fa-times me-2"></i>Out of Stock
+                                    </button>
+                                {% endif %}
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Sample Products if none in database -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop" class="card-img-top" alt="MacBook Pro" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none;">In Stock</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">MacBook Pro M3</h5>
+                            <p class="card-text text-muted small mb-3">Powerful laptop for professionals with M3 chip and stunning display.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$1,299.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★★</div>
+                                    <small class="text-muted">4.9 (127)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=400&h=300&fit=crop" class="card-img-top" alt="iPhone 15" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border: none;">Hot Deal</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">iPhone 15 Pro</h5>
+                            <p class="card-text text-muted small mb-3">Latest smartphone with titanium design and advanced camera system.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$999.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★★</div>
+                                    <small class="text-muted">4.8 (89)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=400&h=300&fit=crop" class="card-img-top" alt="AirPods Pro" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none;">In Stock</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">AirPods Pro 2</h5>
+                            <p class="card-text text-muted small mb-3">Wireless earbuds with active noise cancellation and spatial audio.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$249.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★★</div>
+                                    <small class="text-muted">4.7 (156)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop" class="card-img-top" alt="iPad Air" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; border: none;">New</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">iPad Air 5th Gen</h5>
+                            <p class="card-text text-muted small mb-3">Versatile tablet with M1 chip, perfect for work and creativity.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$599.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★★</div>
+                                    <small class="text-muted">4.6 (203)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1510017803434-a899398421b3?w=400&h=300&fit=crop" class="card-img-top" alt="Apple Watch" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none;">In Stock</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">Apple Watch Series 9</h5>
+                            <p class="card-text text-muted small mb-3">Advanced smartwatch with health monitoring and fitness tracking.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$399.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★★</div>
+                                    <small class="text-muted">4.8 (94)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="card-product fade-in">
+                        <div class="position-relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&h=300&fit=crop" class="card-img-top" alt="Magic Keyboard" style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border: none;">In Stock</span>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <h5 class="card-title mb-2 fw-bold">Magic Keyboard</h5>
+                            <p class="card-text text-muted small mb-3">Wireless keyboard with numeric keypad and rechargeable battery.</p>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h4 class="mb-0 fw-bold" style="color: #4facfe;">$149.99</h4>
+                                    <small class="text-muted">Free shipping</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="text-warning mb-1">★★★★☆</div>
+                                    <small class="text-muted">4.3 (67)</small>
+                                </div>
+                            </div>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
+                                </button>
+                                <button class="btn btn-gold">
+                                    <i class="fas fa-bolt me-2"></i>Buy Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Load More Button -->
+        <div class="text-center mt-5">
+            <button class="btn btn-glass btn-lg">
+                <i class="fas fa-plus me-2"></i>Load More Products
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-shipping-fast fa-3x" style="color: #4facfe;"></i>
+                </div>
+                <h5 class="text-white">Free Shipping</h5>
+                <p class="text-white-50 small mb-0">On orders over $50</p>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-undo fa-3x" style="color: #f5576c;"></i>
+                </div>
+                <h5 class="text-white">Easy Returns</h5>
+                <p class="text-white-50 small mb-0">30-day return policy</p>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-lock fa-3x" style="color: #fcb69f;"></i>
+                </div>
+                <h5 class="text-white">Secure Payment</h5>
+                <p class="text-white-50 small mb-0">SSL encrypted checkout</p>
+            </div>
+            <div class="col-lg-3 col-md-6 text-center">
+                <div class="mb-3">
+                    <i class="fas fa-headset fa-3x" style="color: #00f2fe;"></i>
+                </div>
+                <h5 class="text-white">24/7 Support</h5>
+                <p class="text-white-50 small mb-0">Always here to help</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,115 @@
+<div class="container-fluid" style="background-color: #111217;">
+  <div class="container py-5">
+    <footer>
+      <div class="row g-5">
+        <!-- Quick Links -->
+        <div class="col-6 col-md-3">
+          <h6 class="text-light mb-3">Quick Links</h6>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="/" class="nav-link p-0 text-light">Home</a></li>
+            <li class="nav-item mb-2"><a href="/features" class="nav-link p-0 text-light">Features</a></li>
+            <li class="nav-item mb-2"><a href="/pricing" class="nav-link p-0 text-light">Pricing</a></li>
+            <li class="nav-item mb-2"><a href="/faq" class="nav-link p-0 text-light">FAQs</a></li>
+            <li class="nav-item mb-2"><a href="/about" class="nav-link p-0 text-light">About</a></li>
+          </ul>
+        </div>
+
+        <!-- Resources -->
+        <div class="col-6 col-md-3">
+          <h6 class="text-light mb-3">Resources</h6>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Docs</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Blog</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Community</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Support</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div class="col-6 col-md-3">
+          <h6 class="text-light mb-3">Legal</h6>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Privacy Policy</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Terms of Service</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-light">Cookie Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Newsletter + Social -->
+        <div class="col-12 col-md-3">
+          <h6 class="text-light mb-3">Stay Connected</h6>
+          <p class="text-secondary small mb-3">Get the latest updates and offers delivered to your inbox.</p>
+          <form class="d-flex flex-column gap-2">
+            <input type="email" class="form-control bg-dark text-light border-0 rounded-pill"
+                   placeholder="Enter your email" style="background-color: #1e1e2a !important;">
+            <button class="btn btn-gradient btn-sm w-100 rounded-pill" type="submit">Subscribe</button>
+          </form>
+
+          <!-- Social Media Icons -->
+          <div class="mt-4 d-flex gap-3">
+            <a href="#" class="text-light fs-5"><i class="bi bi-facebook"></i></a>
+            <a href="#" class="text-light fs-5"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-light fs-5"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="text-light fs-5"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <hr class="my-4 border-secondary">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <p class="text-light small mb-2 mb-md-0">© {{ year }} ShopEase. Ameerpasha.</p>
+        <p class="text-light small mb-0">Made with ❤️ for amazing customers</p>
+      </div>
+    </footer>
+  </div>
+</div>
+
+
+
+<style>
+/* Footer Links */
+footer a.text-light {
+  transition: color 0.3s ease;
+  text-decoration: underline; /* Always underlined */
+  color: #fff; /* Default color */
+}
+footer a.text-light:hover {
+  color: #667eea !important; /* Match primary button gradient color */
+}
+
+/* Gradient Button */
+.btn-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+/* Input Field Focus */
+footer .form-control:focus {
+  background-color: #1e1e2a !important;
+  border-color: #667eea;
+  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  color: white;
+}
+footer .form-control::placeholder {
+  color: #aaa;
+}
+
+/* Social Hover */
+footer a[href*="facebook"]:hover { color: #1877f2 !important; }
+footer a[href*="twitter"]:hover { color: #1da1f2 !important; }
+footer a[href*="instagram"]:hover { color: #e4405f !important; }
+footer a[href*="linkedin"]:hover { color: #0077b5 !important; }
+</style>
+
+
+
+
+
+

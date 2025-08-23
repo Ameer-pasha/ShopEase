@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% block title %}Login - ShopEase{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+            <div class="col-lg-5 col-md-7">
+                <div class="card-glass shadow-custom bounce-in">
+                    <div class="card-body p-5">
+                        <!-- Header -->
+                        <div class="text-center mb-5">
+                            <div class="mb-4">
+                                <div class="d-inline-block p-4 rounded-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    <i class="fas fa-sign-in-alt fa-3x text-white"></i>
+                                </div>
+                            </div>
+                            <h2 class="text-white mb-2 fw-bold">Welcome Back!</h2>
+                            <p class="text-white-50">Sign in to your ShopEase account</p>
+                        </div>
+
+                        <!-- Login Form -->
+                        <form method="POST" class="fade-in">
+                            {{ form.hidden_tag() }}
+
+                            <!-- Email Field -->
+                            <div class="mb-4">
+                                {{ form.email.label(class="form-label") }}
+                                <div class="position-relative">
+                                    <div class="position-absolute top-50 start-0 translate-middle-y ms-3" style="z-index: 10;">
+                                        <i class="fas fa-envelope text-white-50"></i>
+                                    </div>
+                                    {{ form.email(class="form-control ps-5" + (" is-invalid" if form.email.errors else ""), placeholder="Enter your email address") }}
+                                </div>
+                                {% if form.email.errors %}
+                                    <div class="text-danger mt-2">
+                                        {% for error in form.email.errors %}
+                                            <small><i class="fas fa-exclamation-circle me-1"></i>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                {{ form.password.label(class="form-label") }}
+                                <div class="position-relative">
+                                    <div class="position-absolute top-50 start-0 translate-middle-y ms-3" style="z-index: 10;">
+                                        <i class="fas fa-lock text-white-50"></i>
+                                    </div>
+                                    {{ form.password(class="form-control ps-5" + (" is-invalid" if form.password.errors else ""), placeholder="Enter your password") }}
+                                </div>
+                                {% if form.password.errors %}
+                                    <div class="text-danger mt-2">
+                                        {% for error in form.password.errors %}
+                                            <small><i class="fas fa-exclamation-circle me-1"></i>{{ error }}</small>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                                    <label class="form-check-label text-white-50" for="rememberMe">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="#" class="text-white-50 text-decoration-none">
+                                    <small>Forgot password?</small>
+                                </a>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid mb-4">
+                                {{ form.submit(class="btn btn-primary btn-lg") }}
+                            </div>
+                        </form>
+
+                        <!-- Divider -->
+                        <div class="text-center mb-4">
+                            <div class="d-flex align-items-center">
+                                <hr class="flex-grow-1" style="border-color: rgba(255,255,255,0.2);">
+                                <span class="px-3 text-white-50 small fw-semibold">OR</span>
+                                <hr class="flex-grow-1" style="border-color: rgba(255,255,255,0.2);">
+                            </div>
+                        </div>
+
+                        <!-- Social Login -->
+                        <div class="d-grid gap-2 mb-4">
+                            <button class="btn btn-glass d-flex align-items-center justify-content-center">
+                                <i class="fab fa-google me-3 fs-5"></i>
+                                <span>Continue with Google</span>
+                            </button>
+                            <button class="btn btn-glass d-flex align-items-center justify-content-center">
+                                <i class="fab fa-facebook me-3 fs-5"></i>
+                                <span>Continue with Facebook</span>
+                            </button>
+                        </div>
+
+                        <!-- Sign Up Link -->
+                        <div class="text-center">
+                            <p class="text-white-50 mb-0">
+                                Don't have an account?
+                                <a href="{{ url_for('register') }}" class="text-white text-decoration-none fw-semibold">
+                                    <i class="fas fa-user-plus me-1"></i>Create one now
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features -->
+                <div class="row mt-4 g-3">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-2">
+                                <i class="fas fa-shield-alt fa-2x" style="color: #4facfe;"></i>
+                            </div>
+                            <small class="text-white-50">Secure Login</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-2">
+                                <i class="fas fa-bolt fa-2x" style="color: #f5576c;"></i>
+                            </div>
+                            <small class="text-white-50">Lightning Fast</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="mb-2">
+                                <i class="fas fa-heart fa-2x" style="color: #fcb69f;"></i>
+                            </div>
+                            <small class="text-white-50">24/7 Support</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

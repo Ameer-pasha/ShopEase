@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% block title %}ShopEase - Premium E-commerce Experience{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero fade-in">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="bounce-in">Welcome to ShopEase</h1>
+                <p class="lead fade-in">Discover premium technology products with unmatched quality and style. Your journey to digital excellence starts here.</p>
+                <div class="mt-5">
+                    {% if not session.user_id %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-3 bounce-in">
+                            <i class="fas fa-rocket me-2"></i>Get Started Free
+                        </a>
+                        <a href="{{ url_for('products') }}" class="btn btn-gold btn-lg bounce-in">
+                            <i class="fas fa-shopping-bag me-2"></i>Shop Now
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-3 bounce-in">
+                            <i class="fas fa-tachometer-alt me-2"></i>Your Dashboard
+                        </a>
+                        <a href="{{ url_for('products') }}" class="btn btn-gold btn-lg bounce-in">
+                            <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 fade-in">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="text-white mb-3 text-gradient">Why Choose ShopEase?</h2>
+                <p class="text-white-50 lead">Experience the difference with our premium features</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-bolt fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Lightning Fast</h4>
+                    <p class="text-white-50">Experience blazing-fast loading times and seamless navigation. Your time is precious, and we respect that.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-shield-alt fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Bank-Level Security</h4>
+                    <p class="text-white-50">Your data is protected with enterprise-grade security. Shop with confidence knowing you're safe with us.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i class="fas fa-heart fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Premium Support</h4>
+                    <p class="text-white-50">24/7 dedicated customer support team ready to help. We're here for you every step of the way.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                            <i class="fas fa-mobile-alt fa-2x text-dark"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Mobile Optimized</h4>
+                    <p class="text-white-50">Perfect experience on any device. Shop seamlessly from your phone, tablet, or desktop.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-shipping-fast fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Fast Delivery</h4>
+                    <p class="text-white-50">Free shipping on orders over $50. Get your products delivered quickly and safely to your doorstep.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="card-glass h-100 text-center p-4">
+                    <div class="mb-4">
+                        <div class="d-inline-block p-3 rounded-circle" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-star fa-2x text-white"></i>
+                        </div>
+                    </div>
+                    <h4 class="text-white mb-3">Premium Quality</h4>
+                    <p class="text-white-50">Only the highest quality products make it to our store. Every item is carefully curated for excellence.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5 fade-in">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="card-glass text-center p-4 shadow-custom">
+                    <div class="mb-3">
+                        <i class="fas fa-users fa-3x" style="color: #4facfe;"></i>
+                    </div>
+                    <h2 class="text-white mb-2 fw-bold">50,000+</h2>
+                    <p class="text-white-50 mb-0">Happy Customers</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="card-glass text-center p-4 shadow-custom">
+                    <div class="mb-3">
+                        <i class="fas fa-box-open fa-3x" style="color: #f5576c;"></i>
+                    </div>
+                    <h2 class="text-white mb-2 fw-bold">100,000+</h2>
+                    <p class="text-white-50 mb-0">Products Sold</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="card-glass text-center p-4 shadow-custom">
+                    <div class="mb-3">
+                        <i class="fas fa-clock fa-3x" style="color: #fcb69f;"></i>
+                    </div>
+                    <h2 class="text-white mb-2 fw-bold">99.9%</h2>
+                    <p class="text-white-50 mb-0">Uptime</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6 mb-4">
+                <div class="card-glass text-center p-4 shadow-custom">
+                    <div class="mb-3">
+                        <i class="fas fa-headset fa-3x" style="color: #764ba2;"></i>
+                    </div>
+                    <h2 class="text-white mb-2 fw-bold">24/7</h2>
+                    <p class="text-white-50 mb-0">Support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="py-5 fade-in">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="text-white mb-3 text-gradient">What Our Customers Say</h2>
+                <p class="text-white-50 lead">Don't just take our word for it</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="text-center mb-3">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left fa-2x" style="color: #4facfe;"></i>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-50 text-center">"ShopEase has completely transformed my shopping experience. The quality is unmatched and the service is exceptional!"</p>
+                    <div class="text-center mt-4">
+                        <div class="d-inline-block p-2 rounded-circle" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="text-white mb-0">Sarah Johnson</h6>
+                            <small class="text-white-50">Verified Customer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="text-center mb-3">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left fa-2x" style="color: #f5576c;"></i>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-50 text-center">"Fast delivery, amazing products, and customer service that actually cares. ShopEase is now my go-to store!"</p>
+                    <div class="text-center mt-4">
+                        <div class="d-inline-block p-2 rounded-circle" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="text-white mb-0">Mike Chen</h6>
+                            <small class="text-white-50">Verified Customer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card-glass p-4 h-100">
+                    <div class="text-center mb-3">
+                        <div class="mb-3">
+                            <i class="fas fa-quote-left fa-2x" style="color: #fcb69f;"></i>
+                        </div>
+                        <div class="mb-3">
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                            <i class="fas fa-star" style="color: #fbbf24;"></i>
+                        </div>
+                    </div>
+                    <p class="text-white-50 text-center">"The website is beautiful, easy to use, and the products are exactly as described. Highly recommend!"</p>
+                    <div class="text-center mt-4">
+                        <div class="d-inline-block p-2 rounded-circle" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-user text-white"></i>
+                        </div>
+                        <div class="mt-2">
+                            <h6 class="text-white mb-0">Emily Davis</h6>
+                            <small class="text-white-50">Verified Customer</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 fade-in">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="card-glass p-5 shadow-custom">
+                    <div class="mb-4">
+                        <i class="fas fa-rocket fa-4x" style="color: #4facfe;"></i>
+                    </div>
+                    <h2 class="text-white mb-4">Ready to Start Your Journey?</h2>
+                    <p class="text-white-50 mb-4 lead">Join thousands of satisfied customers who have made ShopEase their trusted shopping destination. Experience premium quality, exceptional service, and unbeatable prices.</p>
+                    {% if not session.user_id %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-user-plus me-2"></i>Create Free Account
+                        </a>
+                        <a href="{{ url_for('products') }}" class="btn btn-gold btn-lg">
+                            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-tachometer-alt me-2"></i>Go to Dashboard
+                        </a>
+                        <a href="{{ url_for('products') }}" class="btn btn-gold btn-lg">
+                            <i class="fas fa-shopping-bag me-2"></i>Explore Products
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

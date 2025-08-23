@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% block title %}Shopping Cart - ShopEase{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center mb-4">
+                    <h2 class="text-white mb-0 me-3"><i class="fas fa-shopping-cart me-2"></i>Your Cart</h2>
+                    <span class="badge" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); font-size: 0.9rem;">
+                        {{ cart_items|length }} item{{ 's' if cart_items|length != 1 else '' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        {% if cart_items %}
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Cart Items -->
+                {% for item in cart_items %}
+                <div class="cart-item card-glass mb-4 fade-in" data-item-id="{{ item.product.id }}">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <img src="{{ item.product.image_url or 'https://via.placeholder.com/150' }}"
+                                     class="img-fluid rounded" alt="{{ item.product.name }}" style="max-height: 100px; object-fit: cover;">
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-white mb-1">{{ item.product.name }}</h5>
+                                <p class="text-white-50 small mb-2">{{ item.product.description[:60] }}{% if item.product.description|length > 60 %}...{% endif %}</p>
+                                <div class="text-warning">
+                                    {% for i in range(5) %}
+                                        <i class="fas fa-star"></i>
+                                    {% endfor %}
+                                    <span class="text-white-50 small ms-1">(4.9)</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button class="btn btn-glass btn-sm me-2 quantity-btn" data-action="decrease" data-item-id="{{ item.product.id }}">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span class="text-white fw-bold mx-2 quantity-display">{{ item.quantity }}</span>
+                                    <button class="btn btn-glass btn-sm ms-2 quantity-btn" data-action="increase" data-item-id="{{ item.product.id }}">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <h4 class="text-white mb-0 fw-bold item-total">${{ "%.2f"|format(item.product.price * item.quantity) }}</h4>
+                                <small class="text-white-50">Each: ${{ "%.2f"|format(item.product.price) }}</small>
+                            </div>
+                            <div class="col-md-2 text-center">
+                                <button class="btn btn-outline-danger btn-sm remove-item" data-item-id="{{ item.product.id }}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn btn-glass btn-sm ms-1 wishlist-btn" data-item-id="{{ item.product.id }}">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+                <!-- Continue Shopping -->
+                <div class="mt-4">
+                    <a href="{{ url_for('products') }}" class="btn btn-glass">
+                        <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Order Summary -->
+                <div class="card-glass sticky-top">
+                    <div class="card-body p-4">
+                        <h4 class="text-white mb-4"><i class="fas fa-receipt me-2"></i>Order Summary</h4>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50">Subtotal ({{ cart_items|length }} items)</span>
+                            <span class="text-white" id="subtotal">${{ "%.2f"|format(total) }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50">Shipping</span>
+                            {% if total >= 50 %}
+                                <span class="text-success" id="shipping">FREE</span>
+                            {% else %}
+                                <span class="text-white" id="shipping">$9.99</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-white-50">Tax (8%)</span>
+                            <span class="text-white" id="tax">${{ "%.2f"|format(total * 0.08) }}</span>
+                        </div>
+
+                        <hr style="border-color: rgba(255,255,255,0.2);">
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="text-white mb-0">Total</h5>
+                            <h4 class="text-white mb-0 fw-bold" id="final-total">
+                                ${{ "%.2f"|format(total + (0 if total >= 50 else 9.99) + (total * 0.08)) }}
+                            </h4>
+                        </div>
+
+                        {% if total < 50 %}
+                        <div class="alert alert-info border-0 mb-3" style="background: rgba(13, 202, 240, 0.1); color: #0dcaf0;">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Add ${{ "%.2f"|format(50 - total) }} more for FREE shipping!
+                        </div>
+                        {% endif %}
+
+                        <!-- Promo Code -->
+                        <div class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control bg-dark border-0 text-white"
+                                       placeholder="Enter promo code" id="promo-code">
+                                <button class="btn btn-outline-light" type="button" id="apply-promo">Apply</button>
+                            </div>
+                        </div>
+
+                        <!-- Checkout Button -->
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('checkout') }}" class="btn btn-primary btn-lg"
+                               style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                                <i class="fas fa-lock me-2"></i>Secure Checkout
+                            </a>
+                            <button class="btn btn-glass">
+                                <i class="fab fa-paypal me-2"></i>PayPal
+                            </button>
+                        </div>
+
+                        <!-- Trust Badges -->
+                        <div class="text-center mt-3">
+                            <small class="text-white-50">
+                                <i class="fas fa-shield-alt me-1"></i>Secure SSL Encryption
+                                <span class="mx-2">|</span>
+                                <i class="fas fa-truck me-1"></i>Fast Delivery
+                                <span class="mx-2">|</span>
+                                <i class="fas fa-undo me-1"></i>Easy Returns
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recently Viewed -->
+                <div class="card-glass mt-4">
+                    <div class="card-body p-4">
+                        <h5 class="text-white mb-3"><i class="fas fa-history me-2"></i>Recently Viewed</h5>
+                        <div class="row">
+                            {% for product in recently_viewed[:3] %}
+                            <div class="col-4">
+                                <div class="text-center">
+                                    <img src="{{ product.image_url or 'https://via.placeholder.com/80' }}"
+                                         class="img-fluid rounded mb-2" style="height: 60px; object-fit: cover;">
+                                    <small class="text-white-50 d-block">{{ product.name[:15] }}...</small>
+                                    <small class="text-white fw-bold">${{ "%.2f"|format(product.price) }}</small>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <!-- Empty Cart -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card-glass text-center py-5">
+                    <div class="card-body">
+                        <i class="fas fa-shopping-cart text-white-50 mb-4" style="font-size: 4rem;"></i>
+                        <h3 class="text-white mb-3">Your cart is empty</h3>
+                        <p class="text-white-50 mb-4">Looks like you haven't added any items to your cart yet.</p>
+                        <a href="{{ url_for('products') }}" class="btn btn-primary btn-lg"
+                           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none;">
+                            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- JavaScript for Cart Functionality -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Quantity buttons
+    document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.dataset.action;
+            const itemId = this.dataset.itemId;
+            updateQuantity(itemId, action);
+        });
+    });
+
+    // Remove item buttons
+    document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const itemId = this.dataset.itemId;
+            removeItem(itemId);
+        });
+    });
+
+    // Wishlist buttons
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const itemId = this.dataset.itemId;
+            addToWishlist(itemId);
+        });
+    });
+
+    // Promo code application
+    document.getElementById('apply-promo').addEventListener('click', function() {
+        const promoCode = document.getElementById('promo-code').value;
+        applyPromoCode(promoCode);
+    });
+});
+
+function updateQuantity(itemId, action) {
+    fetch('/cart/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({
+            item_id: itemId,
+            action: action
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showToast('An error occurred. Please try again.', 'error');
+    });
+}
+
+function removeItem(itemId) {
+    if (confirm('Are you sure you want to remove this item from your cart?')) {
+        fetch('/cart/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCsrfToken()
+            },
+            body: JSON.stringify({
+                item_id: itemId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                showToast(data.message, 'error');
+            }
+        });
+    }
+}
+
+function addToWishlist(itemId) {
+    fetch('/wishlist/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({
+            item_id: itemId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showToast(data.message, data.success ? 'success' : 'error');
+    });
+}
+
+function applyPromoCode(code) {
+    fetch('/cart/promo', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCsrfToken()
+        },
+        body: JSON.stringify({
+            promo_code: code
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        showToast(data.message, data.success ? 'success' : 'error');
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+
+
+function showToast(message, type) {
+    // Implement toast notification system
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} position-fixed`;
+    toast.style.top = '20px';
+    toast.style.right = '20px';
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+</script>
+
+<style>
+.card-glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sticky-top {
+    top: 20px;
+}
+
+@media (max-width: 768px) {
+    .col-md-2, .col-md-4 {
+        margin-bottom: 1rem;
+    }
+
+    .sticky-top {
+        position: relative !important;
+        top: auto !important;
+    }
+}
+</style>
+{% endblock %}
