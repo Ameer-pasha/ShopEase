@@ -8,6 +8,7 @@ A modern, full-featured e-commerce web application built with Flask, featuring a
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 
+
 ## Screenshots
 ![ShopEase Screenshot](static/img2.png)
 ![ShopEase Screenshot](static/img3.png)
